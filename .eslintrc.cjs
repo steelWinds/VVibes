@@ -30,6 +30,7 @@ module.exports = {
 	],
 	rules: {
 		'no-tabs': 'off',
-		'@typescript-eslint/strict-boolean-expressions': 'off'
+		'@typescript-eslint/strict-boolean-expressions': 'off',
+		'@typescript-eslint/return-await': 'off'
 	}
 };

@@ -1,5 +1,5 @@
 <script script="ts">
-  import { Alert } from 'flowbite-svelte';
+  import { Alert } from 'flowbite-svelte'
 </script>
 
 <div>

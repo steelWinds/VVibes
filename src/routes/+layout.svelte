@@ -1,5 +1,5 @@
 <script>
-  import "$lib/assets/css/main.pcss";
+  import '$lib/assets/css/main.pcss'
 </script>
 
 <slot />

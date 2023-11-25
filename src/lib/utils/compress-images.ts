@@ -15,7 +15,7 @@ export const compressImages = async (options: ICompressImageOptions): Promise<Fi
   const { images, compressOptions = DEFAULT_COMPRESS_OPTIONS } = options
 
   const promises = images.map(
-    (image) => imageCompression(image, Object.assign(compressOptions, options))
+    async (image) => imageCompression(image, Object.assign(compressOptions, options))
   )
 
   return (await Promise.allSettled(promises))
