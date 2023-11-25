@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="250" height="250" src="https://github.com/steelWinds/VVibes/blob/main/github/logo.svg">
+  <img width="340" height="230" src="https://github.com/steelWinds/VVibes/blob/main/github/logo.png">
 </p>
 
 <div align="center">
@@ -8,8 +8,8 @@
 
 </div>
 
-![GitHub top language](https://img.shields.io/github/languages/top/steelWinds/vibes)
-![GitHub](https://img.shields.io/github/license/steelWinds/vibes)
+![GitHub top language](https://img.shields.io/github/languages/top/steelWinds/VVibes)
+![GitHub](https://img.shields.io/github/license/steelWinds/VVibes)
 
 # VVibes
 
