@@ -27,5 +27,9 @@ module.exports = {
 				parser: '@typescript-eslint/parser'
 			}
 		}
-	]
+	],
+	rules: {
+		'no-tabs': 'off',
+		'@typescript-eslint/strict-boolean-expressions': 'off'
+	}
 };
