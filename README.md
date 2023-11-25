@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="250" height="250" src="https://github.com/steelWinds/vibes/blob/main/github/logo.svg">
+  <img width="250" height="250" src="https://github.com/steelWinds/VVibes/blob/main/github/logo.svg">
 </p>
 
 <div align="center">
