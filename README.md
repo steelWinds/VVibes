@@ -11,6 +11,6 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/steelWinds/VVibes)
 ![GitHub](https://img.shields.io/github/license/steelWinds/VVibes)
 
-# VVibes
+# VVibesJ
 
 It's refactor my another app - [Vibes](https://github.com/steelWinds/vibes).
