@@ -7,6 +7,31 @@ const config = {
   darkMode: 'class',
 
   theme: {
+		fontFamily: {
+			inter: ['Inter', 'Arial Narrow']
+		},
+
+		screens: {
+			mobile: '375px',
+			tablet: '768px',
+			ultrabook: '1024px',
+			laptop: '1440px',
+			desktop: '1920px'
+		},
+
+		fontSize: {
+			8: '8px',
+			10: '10px',
+			12: '12px',
+			14: '14px',
+			16: '16px',
+			18: '18px',
+			20: '20px',
+			20: '20px',
+			22: '22px',
+			24: '24px',
+		},
+
     extend: {
       colors: {
         // flowbite-svelte

@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+	* {
+		font-family: Inter, 'Arial Narrow';
+	}
+
+	:root {
+		--font-base: 12px;
+
+		font-size: var(--font-base);
+
+		@media screen(mobile) {
+			--font-base: calc(100vw / 375 * 16);
+		}
+
+		@media screen(tablet) {
+			--font-base: calc(100vw / 768 * 16);
+		}
+
+		@media screen(ultrabook) {
+			--font-base: calc(100vw / 1024 * 16);
+		}
+
+		@media screen(laptop) {
+			--font-base: calc(100vw / 1440 * 16);
+		}
+
+		@media screen(desktop) {
+			--font-base: calc(100vw / 1920 * 16);
+		}
+	}
+}

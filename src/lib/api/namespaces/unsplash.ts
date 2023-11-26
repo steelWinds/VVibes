@@ -1,4 +1,4 @@
-import { createNamespace } from '../internal/createNamespace'
+import { createNamespace } from '../internal/create-namespace'
 
 export default createNamespace({
   builder: (fetch) => ({

@@ -4,7 +4,7 @@
 
 <div>
 	<Alert>
-		<span class="font-medium">Info alert!</span>
+		<span class="font-medium text-24">Info alert!</span>
     Change a few things up and try submitting again.
 	</Alert>
 </div>
