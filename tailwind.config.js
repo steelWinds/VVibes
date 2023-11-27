@@ -1,8 +1,10 @@
+import flowbitePlugin from 'flowbite/plugin';
+
 /** @type {import('tailwindcss').Config}*/
-const config = {
+export default {
   content: ['./src/**/*.{html,js,svelte,ts}', './node_modules/flowbite-svelte/**/*.{html,js,svelte,ts}'],
 
-  plugins: [require('flowbite/plugin')],
+  plugins: [flowbitePlugin],
 
   darkMode: 'class',
 
@@ -33,7 +35,19 @@ const config = {
 		},
 
     extend: {
+			borderRadius: {
+				10: '10px',
+				20: '20px',
+				30: '30px'
+			},
+
       colors: {
+				// backdrop
+				backdrop: {
+					dark: 'rgba(0 0 0 / .4)',
+					light: 'rgba(255 255 255 / .4)'
+				},
+
         // flowbite-svelte
         primary: {
           50: '#FFF5F2',
@@ -51,5 +65,3 @@ const config = {
     }
   }
 };
-
-module.exports = config;

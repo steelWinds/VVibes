@@ -8,28 +8,31 @@
 	}
 
 	:root {
-		--font-base: 12px;
+		--font-base: 14;
+		--root-font-size: calc(100vw / 375 * var(--font-base));
 
-		font-size: var(--font-base);
+		font-size: var(--root-font-size);
 
 		@media screen(mobile) {
-			--font-base: calc(100vw / 375 * 16);
+			--font-base: 16;
+
+			--root-font-size: calc(100vw / 375 * 16);
 		}
 
 		@media screen(tablet) {
-			--font-base: calc(100vw / 768 * 16);
+			--root-font-size: calc(100vw / 768 * 16);
 		}
 
 		@media screen(ultrabook) {
-			--font-base: calc(100vw / 1024 * 16);
+			--root-font-size: calc(100vw / 1024 * 16);
 		}
 
 		@media screen(laptop) {
-			--font-base: calc(100vw / 1440 * 16);
+			--root-font-size: calc(100vw / 1440 * 16);
 		}
 
 		@media screen(desktop) {
-			--font-base: calc(100vw / 1920 * 16);
+			--root-font-size: calc(100vw / 1920 * 16);
 		}
 	}
 }

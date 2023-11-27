@@ -12,7 +12,10 @@
     "test:integration": "playwright test",
     "lint-staged": "lint-staged",
     "test:unit": "vitest",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "story:dev": "histoire dev",
+    "story:build": "histoire build",
+    "story:preview": "histoire preview"
   },
   "lint-staged": {
     "**/*.{svelte,ts,js}": "eslint --fix"
@@ -20,9 +23,11 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@histoire/plugin-svelte": "^0.17.6",
     "@playwright/test": "^1.28.1",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.27.4",
+    "@types/compute-gcd": "^1.2.3",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "autoprefixer": "^10.4.14",
@@ -31,12 +36,15 @@
     "eslint-plugin-svelte": "^2.30.0",
     "flowbite": "^2.2.0",
     "flowbite-svelte": "^0.44.20",
+    "flowbite-svelte-icons": "^0.4.5",
+    "histoire": "^0.17.6",
     "husky": "^8.0.3",
     "postcss": "^8.4.24",
     "postcss-import": "^15.1.0",
     "postcss-load-config": "^4.0.1",
     "postcss-pxtorem": "^6.0.0",
     "svelte": "^4.2.7",
+    "svelte-breakpoints": "^0.2.0",
     "svelte-check": "^3.6.0",
     "tailwindcss": "^3.3.2",
     "tslib": "^2.4.1",
@@ -49,10 +57,13 @@
     "@types/lodash-es": "^4.17.12",
     "browser-image-compression": "^2.0.2",
     "color": "^4.2.3",
+    "compute-gcd": "^1.2.1",
     "lint-staged": "^15.1.0",
     "lodash-es": "^4.17.21",
     "ofetch": "^1.3.3",
-    "postcss-preset-env": "^9.3.0"
+    "pexels": "^1.4.0",
+    "postcss-preset-env": "^9.3.0",
+    "swiper": "^11.0.5"
   },
   "volta": {
     "node": "21.2.0"

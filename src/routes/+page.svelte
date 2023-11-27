@@ -1,10 +1,7 @@
 <script script="ts">
-  import { Alert } from 'flowbite-svelte'
+  import WidgetPictureSlider from '$lib/components/Widgets/WidgetImagesSlider.svelte'
 </script>
 
 <div>
-	<Alert>
-		<span class="font-medium text-24">Info alert!</span>
-    Change a few things up and try submitting again.
-	</Alert>
+	<WidgetPictureSlider />
 </div>

@@ -26,11 +26,14 @@ module.exports = {
 			parserOptions: {
 				parser: '@typescript-eslint/parser'
 			}
-		}
+		},
 	],
 	rules: {
 		'no-tabs': 'off',
 		'@typescript-eslint/strict-boolean-expressions': 'off',
-		'@typescript-eslint/return-await': 'off'
+		'@typescript-eslint/return-await': 'off',
+    '@typescript-eslint/indent': "off",
+		'@typescript-eslint/promise-function-async': 'off',
+		'no-self-assign': 'off'
 	}
 };
