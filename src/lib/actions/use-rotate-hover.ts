@@ -4,8 +4,6 @@ import type { ActionReturn } from 'svelte/action'
 export const useRotateHover = (node: Node): ActionReturn => {
 	const target = node as HTMLElement
 
-	console.log(target)
-
 	target.style.position = 'relative'
 
 	const glowEl = document.createElement('div')

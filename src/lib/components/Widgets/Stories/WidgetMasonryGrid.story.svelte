@@ -39,7 +39,7 @@
 				let:prop={{ item }}
 			>
 				<div>
-					<img class="h-auto max-w-full rounded-lg" src={item} alt="jopa">
+					<img class="h-auto max-w-full rounded-lg" src={item} alt="Masonry item">
 				</div>
 			</WidgetMasonryGrid>
 		{/if}

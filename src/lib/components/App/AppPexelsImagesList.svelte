@@ -1,18 +1,21 @@
 <script lang="ts">
 	import type { PhotosWithTotalResults, Photo } from 'pexels'
 	import WidgetMasonryGrid from '$lib/components/Widgets/WidgetMasonryGrid.svelte'
+	import UISelectable from '$lib/components/UI/UISelectable.svelte'
 	import { Button, Badge } from 'flowbite-svelte'
 	import { pexels } from '$lib/modules/pexels'
 	import { useClickOutside } from '$lib/actions/use-image-skeleton'
 	import { useLazyImage } from '$lib/actions/use-lazy-image'
+	import { ShareNodesOutline } from 'flowbite-svelte-icons'
 
 	export let query: string = 'random'
 	export let perPage: number = 50
 	export let size: string = 'small'
+	export let selected = new Map<number, Photo>()
 
 	let page = 1
 	let images: Photo[] = []
-	let totalResults: number = 0
+	// let totalResults: number = 0
 
 	const fetchImages = async (): Promise<void> => {
 		try {
@@ -32,9 +35,20 @@
 		}
 	}
 
-	$: if (totalResults && images.length >= totalResults) {
-		console.log('end')
+	const toggleSelected = (image: Photo): void => {
+		selected.has(image.id) ? selected.delete(image.id) : selected.set(image.id, image)
+
+		selected = selected
 	}
+
+	// TODO: work
+	// $: if (totalResults && images.length >= totalResults) {
+	// 	console.log('end')
+	// }
+
+	// $: {
+	// 	console.log(selected)
+	// }
 </script>
 
 <div>
@@ -64,17 +78,38 @@
 					originalHeight: item.height,
 					originalWidth: item.width
 				}}
-				class="rounded-lg overflow-hidden relative"
+				class="rounded-lg overflow-hidden"
 			>
-				<img
-					use:useLazyImage={{ src: item.src.medium }}
-					class="h-auto w-full transition-opacity duration-150"
-					alt={item.alt}
+				<UISelectable
+					class="w-full h-full"
+					overlayClass="z-10"
+					active={selected.has(item.id)}
+					on:toggle={() => { toggleSelected(item) }}
 				>
+					<div
+						class="overflow-hidden relative"
+					>
+							<img
+								use:useLazyImage={{ src: item.src.medium }}
+								class="h-auto w-full transition-opacity duration-150"
+								alt={item.alt}
+							>
+					</div>
 
-				<Badge class="absolute top-2 left-2" href={item.photographer_url} target="_blank" rounded>
-					{ item.photographer }
-				</Badge>
+					<Badge
+						class="text-12 z-20 desktop:text-16 absolute top-2 left-2"
+						href={item.photographer_url}
+						target="_blank"
+						rounded
+						color="dark"
+					>
+						<ShareNodesOutline class="h-3 mr-1" />
+
+						<span class="max-w-[60px] desktop:max-w-[120px] truncate">
+							{ item.photographer }
+						</span>
+					</Badge>
+				</UISelectable>
 			</div>
 		</WidgetMasonryGrid>
 	</div>

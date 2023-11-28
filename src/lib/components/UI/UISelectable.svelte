@@ -2,7 +2,11 @@
 	import { CheckOutline, CloseOutline } from 'flowbite-svelte-icons'
 	import { createEventDispatcher } from 'svelte'
 
+	let _class: string = ''
+
 	export let active: boolean = false
+	export let overlayClass: string = ''
+	export { _class as class }
 
 	interface Events {
 		toggle: boolean
@@ -11,11 +15,11 @@
 	const dispatch = createEventDispatcher<Events>()
 </script>
 
-<button class="ui-selectable" class:active on:click={() => dispatch('toggle', active)}>
-	<span class="ui-selectable__overlay backdrop-blur bg-backdrop-dark">
-		<span class="ui-selectable__checkmark group p-6 bg-white rounded-full">
-			<CheckOutline class="block group-hover:hidden" />
-			<CloseOutline class="hidden group-hover:block" />
+<button class={`ui-selectable ${_class}`} class:active on:click={() => dispatch('toggle', active)}>
+	<span class={`ui-selectable__overlay backdrop-blur bg-backdrop-dark ${overlayClass}`}>
+		<span class="ui-selectable__checkmark group p-4 desktop:p-6 bg-white rounded-full">
+			<CheckOutline class="block group-hover:hidden w-4 h-4 desktop:w-6 desktop:h-6" />
+			<CloseOutline class="hidden group-hover:block w-4 h-4 desktop:w-6 desktop:h-6" />
 		</span>
 	</span>
 
@@ -26,6 +30,7 @@
 	.ui-selectable {
 		position: relative;
     cursor: pointer;
+		overflow: hidden;
 
 		&.active {
 			.ui-selectable__overlay,
