@@ -15,9 +15,11 @@
 
 	let page = 1
 	let images: Photo[] = []
-	// let totalResults: number = 0
+	let totalResults: number = 0
 
 	const fetchImages = async (): Promise<void> => {
+		if (totalResults && images.length >= totalResults) return
+
 		try {
 			const response = await pexels.photos.search({
 				query,
