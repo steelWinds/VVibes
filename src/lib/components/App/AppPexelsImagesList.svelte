@@ -7,9 +7,10 @@
 	import { useClickOutside } from '$lib/actions/use-image-skeleton'
 	import { useLazyImage } from '$lib/actions/use-lazy-image'
 	import { ShareNodesOutline } from 'flowbite-svelte-icons'
+	import { createMasonryGrid } from '$lib/utils/masonry-grid/internal/index'
 
-	export let query: string = 'random'
-	export let perPage: number = 50
+	export let query: string = 'masonry'
+	export let perPage: number = 70
 	export let size: string = 'small'
 	export let selected = new Map<number, Photo>()
 
@@ -32,6 +33,8 @@
 			totalResults = response.total_results
 
 			images = [...images, ...response.photos]
+
+			createMasonryGrid({ columnCount: 7, columnSize: 200, items: images })
 		} finally {
 			images = images
 		}
@@ -66,7 +69,7 @@
 					breakpoint: 768
 				},
 				{
-					cols: 7,
+					cols: 3,
 					breakpoint: 1024
 				}
 			]}

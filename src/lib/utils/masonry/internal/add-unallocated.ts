@@ -14,9 +14,16 @@ export const addUnallocated = <T>(options: IAddUnallocated<T>): T[][] => {
 
 	while (idx < unallocated.length) {
 		const realIdx = idx % unallocated.length
-		const col = idx % matrixCols
+		const currCol = idx % matrixCols
+		const nextCol = (idx + 1) % matrixCols
 
-		matrixCopy[col].push(unallocated[realIdx])
+		if (matrixCopy[currCol] > matrixCopy[nextCol]) {
+			idx++
+
+			continue
+		}
+
+		matrixCopy[currCol].push(unallocated[realIdx])
 
 		idx++
 	}

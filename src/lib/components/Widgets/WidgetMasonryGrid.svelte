@@ -15,9 +15,10 @@
 	export let colsSettings: IMasonryBreakpoint[] = []
 
 	let cols = minCols
-	const dataWatcher = watcher(data, watchFunction)
-
 	let dataGroups = createMasonry({ data, cols })
+
+	const gridColumns: HTMLElement[] = []
+	const dataWatcher = watcher(data, watchFunction)
 
 	$: $dataWatcher = data
 	$: style = `
@@ -25,7 +26,7 @@
 		--cols: ${cols};
 	`
 
-	function watchFunction (old: T[], next: T[]): void {
+	async function watchFunction (old: T[], next: T[]): void {
 		const differenceLength = next.length - old.length
 
 		if (!differenceLength) return
@@ -64,7 +65,7 @@
 
 <div class="widget-masonry-grid" {style}>
 	{#each dataGroups as group, groupIdx (groupIdx)}
-		<div class="widget-masonry-grid__subgrid">
+		<div bind:this={gridColumns[groupIdx]} class="widget-masonry-grid__subgrid">
 			{#each group as item, itemIdx (itemIdx)}
 				<slot prop={{ item, itemIdx }} />
 			{/each}
