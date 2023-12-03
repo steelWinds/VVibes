@@ -6,5 +6,5 @@
 </script>
 
 <Hst.Story>
-	<AppPexelsImagesList />
+	<AppPexelsImagesList query="nature" />
 </Hst.Story>

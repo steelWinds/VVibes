@@ -48,7 +48,7 @@
 		position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    inline-size: 100%;
     height: 100%;
     display: grid;
 		place-content: center;

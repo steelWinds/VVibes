@@ -1,21 +1,25 @@
 <script lang="ts" generics="T">
-	import { createMasonry, addUnallocated } from '$lib/utils/masonry/index'
 	import { useMediaQuery } from 'svelte-breakpoints'
 	import { onMount } from 'svelte'
 	import { watcher } from '$lib/modules/watcher'
+	import { createMatrix, mergeMatrix, type TMasonryMatrix, type IMasonryItem } from '~/src/lib/utils/masonry-grid'
 
+	type TDataList = T & IMasonryItem
 	interface IMasonryBreakpoint {
 		cols: number
 		breakpoint: number
 	}
 
-	export let data: T[] = []
+	export let data: TDataList[] = []
 	export let gap: number = 10
-	export let minCols: number = 2
+	export let minCols: number = 7
 	export let colsSettings: IMasonryBreakpoint[] = []
 
+	const { matrix, columnBlockSizes: _columnBlockSizes } = createMatrix({ columnCount: minCols, columnSize: 200, items: data })
+
 	let cols = minCols
-	let dataGroups = createMasonry({ data, cols })
+	let columnBlockSizes: number[] = _columnBlockSizes
+	let dataGroups: TMasonryMatrix<T> = matrix
 
 	const gridColumns: HTMLElement[] = []
 	const dataWatcher = watcher(data, watchFunction)
@@ -26,14 +30,29 @@
 		--cols: ${cols};
 	`
 
-	async function watchFunction (old: T[], next: T[]): void {
+	function updateMatrix (cols: number): void {
+		const { matrix, columnBlockSizes: _columnBlockSizes } = createMatrix({ items: data, columnCount: cols, columnSize: 200 })
+
+		columnBlockSizes = _columnBlockSizes
+		dataGroups = matrix
+	}
+
+	function watchFunction (old: TDataList[], next: TDataList[]): void {
 		const differenceLength = next.length - old.length
 
 		if (!differenceLength) return
 
 		const nextList = !old.length ? next : next.slice(differenceLength)
 
-		dataGroups = addUnallocated({ matrix: dataGroups, unallocated: nextList })
+		const { matrix, columnBlockSizes: _columnBlockSizes } = mergeMatrix({
+			matrix: dataGroups,
+			matrixColumnBlockSizes: columnBlockSizes,
+			items: nextList,
+			columnSize: 200
+		})
+
+		columnBlockSizes = _columnBlockSizes
+		dataGroups = matrix
 	}
 
 	onMount(() => {
@@ -47,7 +66,7 @@
 			breakpointQuery.subscribe((isActive) => {
 				cols = isActive ? breakpointCols : cols
 
-				dataGroups = createMasonry({ data, cols })
+				updateMatrix(cols)
 			})
 		})
 
@@ -57,7 +76,7 @@
 			if (isActive) {
 				cols = minCols
 
-				dataGroups = createMasonry({ data, cols })
+				updateMatrix(cols)
 			}
 		})
 	})
@@ -66,7 +85,7 @@
 <div class="widget-masonry-grid" {style}>
 	{#each dataGroups as group, groupIdx (groupIdx)}
 		<div bind:this={gridColumns[groupIdx]} class="widget-masonry-grid__subgrid">
-			{#each group as item, itemIdx (itemIdx)}
+			{#each group as item, itemIdx (`${item.id}-${itemIdx}`)}
 				<slot prop={{ item, itemIdx }} />
 			{/each}
 		</div>

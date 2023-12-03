@@ -4,18 +4,18 @@
 	import UISelectable from '$lib/components/UI/UISelectable.svelte'
 	import { Button, Badge } from 'flowbite-svelte'
 	import { pexels } from '$lib/modules/pexels'
-	import { useClickOutside } from '$lib/actions/use-image-skeleton'
 	import { useLazyImage } from '$lib/actions/use-lazy-image'
+	import { useImageSkeleton } from '../../actions/use-image-skeleton'
 	import { ShareNodesOutline } from 'flowbite-svelte-icons'
-	import { createMasonryGrid } from '$lib/utils/masonry-grid/internal/index'
+	import type { IMasonryItem } from '~/src/lib/utils/masonry-grid'
 
-	export let query: string = 'masonry'
-	export let perPage: number = 70
+	export let query: string = 'all'
+	export let perPage: number = 100
 	export let size: string = 'small'
 	export let selected = new Map<number, Photo>()
 
 	let page = 1
-	let images: Photo[] = []
+	let images: Array<Photo & IMasonryItem> = []
 	let totalResults: number = 0
 
 	const fetchImages = async (): Promise<void> => {
@@ -33,8 +33,6 @@
 			totalResults = response.total_results
 
 			images = [...images, ...response.photos]
-
-			createMasonryGrid({ columnCount: 7, columnSize: 200, items: images })
 		} finally {
 			images = images
 		}
@@ -69,7 +67,7 @@
 					breakpoint: 768
 				},
 				{
-					cols: 3,
+					cols: 7,
 					breakpoint: 1024
 				}
 			]}
@@ -78,10 +76,10 @@
 			let:prop={{ item }}
 		>
 			<div
-				use:useClickOutside={{
-					color: item.avg_color ?? 'black',
-					originalHeight: item.height,
-					originalWidth: item.width
+				use:useImageSkeleton={{
+					color: item.avg_color ?? 'gray',
+					inlineSize: item.width,
+					blockSize: item.height
 				}}
 				class="rounded-lg overflow-hidden"
 			>
@@ -111,7 +109,7 @@
 						<ShareNodesOutline class="h-3 mr-1" />
 
 						<span class="max-w-[60px] desktop:max-w-[120px] truncate">
-							{ item.photographer }
+							{ item.id }
 						</span>
 					</Badge>
 				</UISelectable>

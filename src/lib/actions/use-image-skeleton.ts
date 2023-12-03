@@ -3,8 +3,8 @@ import gcd from 'compute-gcd'
 
 interface IUseImageSkeleton {
 	color: string
-	originalWidth: number
-	originalHeight: number
+	inlineSize: number
+	blockSize: number
 }
 
 const resizeTarget = (target: HTMLElement, width: number, ratio: number): void => {
@@ -13,11 +13,11 @@ const resizeTarget = (target: HTMLElement, width: number, ratio: number): void =
 	target.style.height = `${calculatedHeight}px`
 }
 
-export const useClickOutside = (node: Node, options: IUseImageSkeleton): ActionReturn => {
-  const { color, originalHeight, originalWidth } = options
+const onInitHandler = (node: Node, options: IUseImageSkeleton): ResizeObserver => {
+	const { color, blockSize, inlineSize } = options
 
-	const sizesGcd = gcd(originalWidth, originalHeight)
-	const ratio = (originalHeight / sizesGcd) / (originalWidth / sizesGcd)
+	const sizesGcd = gcd(inlineSize, blockSize)
+	const ratio = (blockSize / sizesGcd) / (inlineSize / sizesGcd)
 
 	const target = node as HTMLElement
 
@@ -37,9 +37,23 @@ export const useClickOutside = (node: Node, options: IUseImageSkeleton): ActionR
 
 	observer.observe(target)
 
+	return observer
+}
+
+export const useImageSkeleton = (node: Node, options: IUseImageSkeleton): ActionReturn => {
+  const observer = onInitHandler(node, options)
+
   return {
     destroy () {
 			observer.disconnect()
+		},
+
+		update (_options) {
+			observer.disconnect()
+
+			const options = _options as never as IUseImageSkeleton
+
+			onInitHandler(node, options)
 		}
   }
 }

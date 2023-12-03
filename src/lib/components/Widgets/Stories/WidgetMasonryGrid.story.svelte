@@ -1,6 +1,9 @@
 <script lang="ts">
+	import { random } from 'lodash-es'
 	import WidgetMasonryGrid from '../WidgetMasonryGrid.svelte'
 	import { onMount } from 'svelte'
+	import type { IMasonryItem } from '~/src/lib/utils/masonry-grid'
+	import { v4 as uuidv4 } from 'uuid'
 
 	const imageModules = import.meta.glob('../../../../tested-images/*.{jpg,png,jpeg,webp}')
 
@@ -9,10 +12,15 @@
 	const promises = Object.values(imageModules).map(v => v())
 	const awaited = Promise.allSettled(promises)
 
-	let images: string[] = []
+	let images: Array<IMasonryItem & { src: string }> = []
 
 	onMount(async () => {
-		images = (await awaited).map((v) => v.value.default).slice(0, 1000)
+		images = (await awaited).map((v) => v.value.default).slice(0, 120).map((src) => ({
+			id: uuidv4(),
+			width: random(100, 300),
+			height: random(300, 100),
+			src
+		}))
 	})
 </script>
 
@@ -30,7 +38,7 @@
 						breakpoint: 768
 					},
 					{
-						cols: 10,
+						cols: 7,
 						breakpoint: 1024
 					}
 				]}
@@ -39,7 +47,7 @@
 				let:prop={{ item }}
 			>
 				<div>
-					<img class="h-auto max-w-full rounded-lg" src={item} alt="Masonry item">
+					<img class="h-auto max-w-full rounded-lg" src={item.src} alt="Masonry item">
 				</div>
 			</WidgetMasonryGrid>
 		{/if}
