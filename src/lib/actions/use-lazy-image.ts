@@ -42,7 +42,9 @@ export const useLazyImage = (node: Node, options: IUseLazyImage): ActionReturn =
 		},
 
 		update (_options) {
-      const options = _options as never as IUseLazyImage
+      const updateOptions = _options as never as IUseLazyImage
+
+			if (updateOptions.src === options.src) return
 
 			clearLazyImage()
 

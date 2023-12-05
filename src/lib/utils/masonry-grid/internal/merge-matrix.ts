@@ -1,5 +1,3 @@
-import { createColumns } from './create-columns'
-import { buildRows } from './build-rows'
 import type { IMasonryReturn, TMasonryItems, TMasonryMatrix } from './types'
 
 export interface IMasonryMergeColumnsOptions<T> {
@@ -9,21 +7,14 @@ export interface IMasonryMergeColumnsOptions<T> {
 	columnSize: number
 }
 
-export const mergeMatrix = <T>(options: IMasonryMergeColumnsOptions<T>): IMasonryReturn<T> => {
-	const { matrix, matrixColumnBlockSizes, items, columnSize } = options
-
-	const rows = buildRows({ items, columnSize })
-
-	const [newMatrix, columnBlockSizes] = createColumns({ count: matrix.length, rows, columnBlockSizes: matrixColumnBlockSizes })
-
-	const mergeMatrix = matrix.map((column, id) => {
-		const mergeColumn = [...column, ...newMatrix[id]]
-
-		return mergeColumn
+export const mergeMatrix = <T>(options: IMasonryMergeColumnsOptions<T>): Promise<IMasonryReturn<T>> => {
+	const worker = new Worker(new URL('./merge-matrix.worker.ts', import.meta.url), {
+		type: 'module'
 	})
 
-	return {
-		matrix: mergeMatrix,
-		columnBlockSizes
-	}
+	return new Promise<IMasonryReturn<T>>((resolve) => {
+		worker?.postMessage(options)
+
+		worker?.addEventListener('message', (e) => { resolve(e.data) })
+	})
 }

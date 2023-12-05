@@ -37,14 +37,14 @@
 		dataGroups = matrix
 	}
 
-	function watchFunction (old: TDataList[], next: TDataList[]): void {
+	async function watchFunction (old: TDataList[], next: TDataList[]): Promise<void> {
 		const differenceLength = next.length - old.length
 
 		if (!differenceLength) return
 
 		const nextList = !old.length ? next : next.slice(differenceLength)
 
-		const { matrix, columnBlockSizes: _columnBlockSizes } = mergeMatrix({
+		const { matrix, columnBlockSizes: _columnBlockSizes } = await mergeMatrix({
 			matrix: dataGroups,
 			matrixColumnBlockSizes: columnBlockSizes,
 			items: nextList,

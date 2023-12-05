@@ -49,9 +49,11 @@ export const useImageSkeleton = (node: Node, options: IUseImageSkeleton): Action
 		},
 
 		update (_options) {
-			observer.disconnect()
+			const updateOptions = _options as never as IUseImageSkeleton
 
-			const options = _options as never as IUseImageSkeleton
+			if (updateOptions.blockSize === options.blockSize && updateOptions.inlineSize === options.inlineSize) return
+
+			observer.disconnect()
 
 			onInitHandler(node, options)
 		}
