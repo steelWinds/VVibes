@@ -1,6 +1,6 @@
 <!-- Meow.story.svelte -->
 <script lang="ts">
-	import AppPexelsImagesList from '../AppPexelsImagesList.svelte'
+	import AppPexelsImagesList from '../AppUnsplashImagesList.svelte'
 
   export let Hst: Hst
 </script>

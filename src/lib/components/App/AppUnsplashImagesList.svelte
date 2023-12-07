@@ -1,61 +1,59 @@
 <script lang="ts">
-	import type { PhotosWithTotalResults, Photo } from 'pexels'
+	import type { Basic } from 'unsplash-js/dist/methods/photos/types'
+	import type { IMasonryItem } from '~/src/lib/utils/masonry-grid'
 	import WidgetMasonryGrid from '$lib/components/Widgets/WidgetMasonryGrid.svelte'
 	import UISelectable from '$lib/components/UI/UISelectable.svelte'
-	import { Button, Badge } from 'flowbite-svelte'
-	import { pexels } from '$lib/modules/pexels'
+	import InfiniteScroll from 'svelte-infinite-scroll'
+	import { Badge, Spinner } from 'flowbite-svelte'
+	import { ShareNodesOutline } from 'flowbite-svelte-icons'
+	import { unsplash } from '~/src/lib/modules/unsplash'
 	import { useLazyImage } from '$lib/actions/use-lazy-image'
 	import { useImageSkeleton } from '../../actions/use-image-skeleton'
-	import { ShareNodesOutline } from 'flowbite-svelte-icons'
-	import type { IMasonryItem } from '~/src/lib/utils/masonry-grid'
+	import { onMount } from 'svelte'
+
+	type ImageSize = keyof Basic['urls']
 
 	export let query: string = 'all'
 	export let perPage: number = 100
-	export let size: string = 'small'
-	export let selected = new Map<number, Photo>()
+	export let size: ImageSize = 'regular'
+	export let selected = new Map<string, Basic>()
 
 	let page = 1
-	let images: Array<Photo & IMasonryItem> = []
+	let images: Array<Basic & IMasonryItem> = []
 	let totalResults: number = 0
+
+	$: isEnd = totalResults && images.length >= totalResults
 
 	const fetchImages = async (): Promise<void> => {
 		if (totalResults && images.length >= totalResults) return
 
 		try {
-			const response = await pexels.photos.search({
+			const { response } = await unsplash.search.getPhotos({
 				query,
-				per_page: perPage,
-				size,
+				perPage,
 				page
-			}) as PhotosWithTotalResults
+			})
 
-			page = response.page + 1
-			totalResults = response.total_results
+			page += 1
+			totalResults = response?.total ?? Number.MAX_VALUE
 
-			images = [...images, ...response.photos]
+			images = [...images, ...(response?.results ?? [])]
 		} finally {
 			images = images
 		}
 	}
 
-	const toggleSelected = (image: Photo): void => {
+	const toggleSelected = (image: Basic): void => {
 		selected.has(image.id) ? selected.delete(image.id) : selected.set(image.id, image)
 
 		selected = selected
 	}
 
-	// TODO: work
-	// $: if (totalResults && images.length >= totalResults) {
-	// 	console.log('end')
-	// }
-
-	// $: {
-	// 	console.log(selected)
-	// }
+	onMount(() => fetchImages())
 </script>
 
 <div>
-	<div class="p-2 mb-6">
+	<div class="px-2 pt-2">
 		<WidgetMasonryGrid
 			colsSettings={[
 				{
@@ -77,7 +75,7 @@
 		>
 			<div
 				use:useImageSkeleton={{
-					color: item.avg_color ?? 'gray',
+					color: item.color ?? 'gray',
 					inlineSize: item.width,
 					blockSize: item.height
 				}}
@@ -93,15 +91,15 @@
 						class="overflow-hidden relative"
 					>
 							<img
-								use:useLazyImage={{ src: item.src.medium }}
+								use:useLazyImage={{ src: item.urls[size] }}
 								class="h-auto w-full transition-opacity duration-150"
-								alt={item.alt}
+								alt={item.alt_description}
 							>
 					</div>
 
 					<Badge
 						class="text-12 z-20 desktop:text-16 absolute top-2 left-2"
-						href={item.photographer_url}
+						href={item.user.portfolio_url}
 						target="_blank"
 						rounded
 						color="dark"
@@ -115,9 +113,13 @@
 				</UISelectable>
 			</div>
 		</WidgetMasonryGrid>
+
+		{#if !isEnd}
+			<div class="py-5 flex justify-center">
+				<Spinner />
+			</div>
+		{/if}
 	</div>
 
-	<Button class="w-full mb-6" on:click={fetchImages}>
-		Download more
-	</Button>
+	<InfiniteScroll threshold={300} window on:loadMore={fetchImages} />
 </div>
