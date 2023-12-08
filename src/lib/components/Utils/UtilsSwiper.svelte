@@ -5,20 +5,36 @@
 </script>
 
 <script lang="ts" generics="T">
-	import { onMount } from 'svelte'
+	import { onMount, createEventDispatcher } from 'svelte'
+	import type { Swiper } from 'swiper'
 
 	export let data: T[] = []
+	export let slideClass: string = ''
+
+	interface Events {
+		slideChange: Swiper
+	}
+
+	const dispatch = createEventDispatcher<Events>()
 
 	onMount(() => {
 		const swiperEl = document.querySelector('swiper-container')
 
-		swiperEl?.initialize()
+		if (!swiperEl) return
+
+		swiperEl.initialize()
+
+		swiperEl.addEventListener('swiperslidechange', (_event) => {
+			const event = _event as CustomEvent
+
+			dispatch('slideChange', event.detail[0] as Swiper)
+		})
 	})
 </script>
 
 <swiper-container {...$$restProps}>
 	{#each data as item, idx (idx)}
-		<swiper-slide>
+		<swiper-slide class={slideClass}>
 			<slot prop={item} />
 		</swiper-slide>
 	{/each}

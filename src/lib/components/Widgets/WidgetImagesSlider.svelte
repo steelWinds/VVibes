@@ -1,21 +1,24 @@
 <script lang="ts">
-	import { useRotateHover } from '$lib/actions/use-rotate-hover'
 	import UtilsSwiper from '$lib/components/Utils/UtilsSwiper.svelte'
-	import AppPictureCard from '$lib/components/App/AppPictureCard.svelte'
 
 	export let images: string[] = []
 </script>
 
-<div use:useRotateHover class="rounded-30 overflow-hidden transition-all duration-300 hover:duration-150 ease-out">
+<div>
 	<div>
 		<UtilsSwiper
 			data={images}
-			slides-per-view="1"
+			direction="vertical"
+			slides-per-view="auto"
+			class="h-screen"
+			slideClass="h-auto"
+			mousewheel
+			centered-slides
 			let:prop={item}
 		>
-			<div>
-				<AppPictureCard src={item} />
-			</div>
+			<button class="block mb-4 rounded-xl overflow-hidden">
+				<img src={item} alt="Slider img" />
+			</button>
 		</UtilsSwiper>
 	</div>
 </div>

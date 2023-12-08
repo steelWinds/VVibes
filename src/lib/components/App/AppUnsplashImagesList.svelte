@@ -107,7 +107,7 @@
 						<ShareNodesOutline class="h-3 mr-1" />
 
 						<span class="max-w-[60px] desktop:max-w-[120px] truncate">
-							{ item.id }
+							{ item.user.name }
 						</span>
 					</Badge>
 				</UISelectable>
