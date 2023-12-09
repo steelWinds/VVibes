@@ -1,5 +1,5 @@
 <script script="ts">
-  import { Search, Button } from 'flowbite-svelte'
+	import UtilsSearchInput from '$lib/components/Utils/UtilsSearchInput.svelte';
 	import IconLogo from '$lib/assets/icons/logo.svg?url'
 </script>
 
@@ -16,14 +16,12 @@
 
 	<article class="flex flex-col justify-center h-full w-full max-w-[900px] mx-auto z-20 relative overflow-auto">
 		<header class="w-full">
-			<img class="max-w-[200px] ultrabook:max-w-[300px] laptop:max-w-[500px] mx-auto" src={IconLogo} alt="Main logo">
+			<img class="max-w-[300px] ultrabook:max-w-[400px] laptop:max-w-[500px] mx-auto" src={IconLogo} alt="Main logo">
 		</header>
 
-		<div class="px-2">
-			<Search>
-				<Button>Search</Button>
-			</Search>
-		</div>
+		<form class="flex gap-2 px-2">
+			<UtilsSearchInput />
+		</form>
 	</article>
 </div>
 
