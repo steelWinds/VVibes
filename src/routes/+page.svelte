@@ -1,7 +1,15 @@
 <script script="ts">
-  import WidgetPictureSlider from '$lib/components/Widgets/WidgetImagesSlider.svelte'
+  import { Search, Button } from 'flowbite-svelte';
 </script>
 
-<div>
-	<WidgetPictureSlider />
-</div>
+<article>
+	<header>
+		VVibes
+	</header>
+
+	<div>
+		<Search>
+			<Button>Search</Button>
+		</Search>
+	</div>
+</article>
