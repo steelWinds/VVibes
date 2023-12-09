@@ -1,5 +1,5 @@
 <script script="ts">
-  import { Search, Button } from 'flowbite-svelte';
+  import { Search, Button } from 'flowbite-svelte'
 </script>
 
 <article>
