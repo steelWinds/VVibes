@@ -1,5 +1,5 @@
 <script script="ts">
-	import UtilsSearchInput from '$lib/components/Utils/UtilsSearchInput.svelte';
+	import UtilsSearchInput from '$lib/components/Utils/UtilsSearchInput.svelte'
 	import IconLogo from '$lib/assets/icons/logo.svg?url'
 </script>
 
