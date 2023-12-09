@@ -1,7 +1,7 @@
 <script lang="ts" generics="T">
-	import { useMediaQuery } from 'svelte-breakpoints'
+	import { useMediaQuery } from '$lib/modules/use-media-query'
 	import { onMount } from 'svelte'
-	import { watcher } from '$lib/modules/watcher'
+	import { useWatcher } from '$lib/modules/use-watcher'
 	import { createMatrix, mergeMatrix, type TMasonryMatrix, type IMasonryItem } from '~/src/lib/utils/masonry-grid'
 
 	type TDataList = T & IMasonryItem
@@ -22,7 +22,7 @@
 	let dataGroups: TMasonryMatrix<T> = matrix
 
 	const gridColumns: HTMLElement[] = []
-	const dataWatcher = watcher(data, watchFunction)
+	const dataWatcher = useWatcher(data, watchFunction)
 
 	$: $dataWatcher = data
 	$: style = `
