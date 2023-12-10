@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Basic } from 'unsplash-js/dist/methods/collections/types'
-	import UtilsSearchInput, { type IList } from '../UtilsSearchInput.svelte'
+	import UtilsSearchInput from '../UtilsSearchInput.svelte'
 	import { unsplash } from '~/src/lib/modules/unsplash'
 
 	export let Hst: Hst
@@ -11,7 +11,7 @@
     { value: 3, label: 'three' }
   ]
 
-	let selected: IList[] | null = null
+	let selected: any[] | null = null
 	let asyncOptions: Basic[] = []
 
 	const searchCollections = async (filterText: string): Promise<Basic[]> => {

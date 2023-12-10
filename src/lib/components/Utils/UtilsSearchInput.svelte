@@ -1,10 +1,3 @@
-<script context="module" lang="ts">
-	export interface IList {
-		value: string | number
-		label: string
-	}
-</script>
-
 <script setup lang="ts">
 	import Select from 'svelte-select'
 	import { Button, P, Spinner } from 'flowbite-svelte'
@@ -14,7 +7,7 @@
 </script>
 
 <div class="utils-search-input">
-	<Select {...$$restProps} bind:value={value} class="utils-search-input__search !px-0">
+	<Select {...$$restProps} bind:value={value} class="h-full !px-0">
 		<div slot="loading-icon">
 			<Spinner class="w-6" />
 		</div>
@@ -49,13 +42,13 @@
 	</Select>
 
 	<div class="utils-search-input__btns">
-		<Button class="h-[48px]">
+		<Button>
 			<MicrophoneSolid class="w-4 h-4 me-2 -ms-1" />
 
 			Audio
 		</Button>
 
-		<Button class="h-[48px]">
+		<Button>
 			<SearchOutline class="w-5 h-5 me-2 -ms-1" />
 
 			Search
@@ -69,15 +62,18 @@
 		--item-hover-bg: theme(colors.primary.200);
 		--item-is-active-bg: theme(colors.primary.700);
 		--list-max-height: 300px;
+		--multi-select-input-margin: 0px;
+		--height: auto;
+		--item-padding: 8px 20px;
 
 		display: grid;
-		grid-template-rows: repeat(2, auto);
+		grid-template-rows: minmax(42px, auto) auto;
 		align-items: start;
 		gap: 10px;
 
-		@media screen(mobile) {
+		@media screen(tablet) {
 			grid-template-rows: 1fr;
-			grid-template-columns: repeat(2, 1fr);
+			grid-template-columns: 1fr auto;
 		}
 	}
 
