@@ -1,4 +1,3 @@
-<!-- Meow.story.svelte -->
 <script lang="ts">
 	import UISelectable from '../UISelectable.svelte'
   import { onMount } from 'svelte'

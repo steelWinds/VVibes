@@ -1,4 +1,3 @@
-<!-- Meow.story.svelte -->
 <script lang="ts">
 	import UtilsSwiper from '../UtilsSwiper.svelte'
 	import { onMount } from 'svelte'

@@ -1,4 +1,3 @@
-<!-- Meow.story.svelte -->
 <script lang="ts">
 	import AppPexelsImagesList from '../AppUnsplashImagesList.svelte'
 

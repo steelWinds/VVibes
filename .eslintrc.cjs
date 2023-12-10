@@ -34,6 +34,7 @@ module.exports = {
 		'@typescript-eslint/return-await': 'off',
     '@typescript-eslint/indent': "off",
 		'@typescript-eslint/promise-function-async': 'off',
-		'no-self-assign': 'off'
+		'no-self-assign': 'off',
+		'@typescript-eslint/no-explicit-any': 'off'
 	}
 };
