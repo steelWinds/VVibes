@@ -1,4 +1,4 @@
-# VVibes
+# VVibes | Refactoring [Vibes](https://github.com/steelWinds/vibes)
 
 ![GitHub](https://img.shields.io/github/license/steelWinds/VVibes)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/steelWinds/VVibes)
@@ -8,7 +8,7 @@
 
 </br>
 <div align="center">
-  <a href="/">
+  <a href="https://v-vibes.vercel.app/">
     <img width="300" height="230" src="https://github.com/steelWinds/VVibes/blob/main/github/logo.png">
   </a>
 
@@ -19,7 +19,7 @@
   <p align="center">
     Create your vibe color!
     <br />
-    <a href="/">View Demo</a>
+    <a href="https://v-vibes.vercel.app/">View Demo</a>
     ·
     <a href="https://github.com/steelWinds/VVibes/issues">Report Bug</a>
     ·
