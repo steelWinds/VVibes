@@ -1,4 +1,4 @@
-# VVibes
+# VVibes | Refactoring [Vibes](https://github.com/steelWinds/vibes)
 
 ![GitHub](https://img.shields.io/github/license/steelWinds/VVibes)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/steelWinds/VVibes)
