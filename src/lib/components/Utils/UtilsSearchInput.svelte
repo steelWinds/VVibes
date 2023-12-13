@@ -2,8 +2,16 @@
 	import Select from 'svelte-select'
 	import { Button, P, Spinner } from 'flowbite-svelte'
 	import { SearchOutline, MicrophoneSolid, CloseOutline, DropboxSolid } from 'flowbite-svelte-icons'
+	import { createEventDispatcher } from 'svelte'
 
 	export let value: any[] | null = []
+
+	interface Events {
+		search: any
+		audio: any
+	}
+
+	const dispatch = createEventDispatcher<Events>()
 </script>
 
 <div class="utils-search-input">
@@ -27,28 +35,16 @@
 				Oh, is empty!
 			</P>
 		</div>
-
-		<!-- External slots -->
-
-		<svelte:fragment slot="item" let:item let:index>
-			<slot prop={{ item, index }} name="item" />
-		</svelte:fragment>
-
-		<svelte:fragment slot="selection" let:selection>
-			<slot {selection} name="selection" />
-		</svelte:fragment>
-
-		<!-- External slots -->
 	</Select>
 
 	<div class="utils-search-input__btns">
-		<Button>
+		<Button on:click={() => dispatch('audio')}>
 			<MicrophoneSolid class="w-4 h-4 me-2 -ms-1" />
 
 			Audio
 		</Button>
 
-		<Button>
+		<Button on:click={() => dispatch('search')}>
 			<SearchOutline class="w-5 h-5 me-2 -ms-1" />
 
 			Search

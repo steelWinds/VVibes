@@ -13,7 +13,7 @@
 
 	type ImageSize = keyof Basic['urls']
 
-	export let query: string = 'all'
+	export let query: string = ''
 	export let perPage: number = 100
 	export let size: ImageSize = 'regular'
 	export let selected = new Map<string, Basic>()

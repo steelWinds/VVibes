@@ -8,6 +8,8 @@ interface ICreateNamespaceOptions<T> {
 export const createNamespace = <T>(options: ICreateNamespaceOptions<T>): T => {
   const { builder, ofetchOptions = {} } = options
 
+	console.log(options)
+
   const _fetch = ofetch.create(ofetchOptions)
 
   return builder(_fetch)

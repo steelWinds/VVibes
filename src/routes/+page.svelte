@@ -2,36 +2,38 @@
 	import type { Basic } from 'unsplash-js/dist/methods/collections/types'
 	import UtilsSearchInput from '$lib/components/Utils/UtilsSearchInput.svelte'
 	import IconLogo from '$lib/assets/icons/logo.svg?url'
-	import { unsplash } from '~/src/lib/modules/unsplash'
-	import { CheckCircleOutline } from 'flowbite-svelte-icons'
+	import { api } from '$lib/api'
 
-	let asyncOptions: Basic[] = []
+	let asyncOptions: string[] = []
 	let selected: Basic[] | null = null
-	let selectedIds: string[] = []
 	let lastFilterText: string = ''
+	// let currentFilterText: string = ''
 
-	$: selectedIds = selected?.map(({ id }) => id) ?? []
-
-	const searchCollections = async (filterText: string): Promise<Basic[]> => {
+	const searchCollections = async (filterText: string): Promise<string[]> => {
 		if (!filterText.length) return asyncOptions
 
 		lastFilterText = ''
 
-		const { response } = await unsplash.search.getCollections({
-			query: filterText
-		})
+		const response = await api.search.get(filterText)
 
 		lastFilterText = filterText
 
-		asyncOptions = response?.results ?? []
+		asyncOptions = response ?? []
 
 		return asyncOptions
 	}
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
-	const groupBy = ({ user, total_photos }: Basic): string => `
-		${user.username} ${user.name ? `(${user.name})` : ''}, amount: ${total_photos}
-	`
+	const onLoadOptions = async (filterText: string): Promise<string[]> => {
+		// currentFilterText = filterText
+
+		const result = await searchCollections(filterText)
+
+		return result
+	}
+
+	// const onSearch = (): void => {
+	// 	const imageQuery = currentFilterText || selected
+	// }
 </script>
 
 <div class="main-page bg-app-dark overflow-hidden">
@@ -53,29 +55,12 @@
 		<form class="px-4">
 			<UtilsSearchInput
 				bind:value={selected}
-				{groupBy}
-				loadOptions={searchCollections}
-				itemId="id"
-				label="title"
-				multiple={true}
+				loadOptions={onLoadOptions}
 				placeholder={lastFilterText || 'Search images'}
-				debounceWait={500}
+				debounceWait={0}
 				clearFilterTextOnBlur={false}
 				closeListOnChange={false}
-			>
-				<div slot="item" class="flex justify-between items-center" class:text-red={true} let:prop={{ item }}>
-					<span>{ item.title }</span>
-
-					{#if item.groupItem && selectedIds.includes(item.id)}
-						<CheckCircleOutline class="w-4 text-primary-700" />
-					{/if}
-				</div>
-
-				<div slot="selection" let:selection>
-					<span>{selection.title}</span>
-					<span>({selection.user.username})</span>
-				</div>
-			</UtilsSearchInput>
+			/>
 		</form>
 	</article>
 </div>
