@@ -1,21 +1,18 @@
 <script lang="ts">
-	import { onMount } from 'svelte'
   import { page } from '$app/stores'
-	import { api } from '$lib/api'
+	import { FaceMindBlowSolid } from 'flowbite-svelte-icons'
+	import UIIconCard from '$lib/components/UI/UIIconCard.svelte'
+	import AppUnsplashImagesList from '$lib/components/App/AppUnsplashImagesList.svelte'
 
-	$: collectionsArray = $page.url.searchParams.get('collections')?.split(',') ?? []
-
-	const completeSearch = async (): Promise<void> => {
-		const r = await api.search.get('nat')
-
-		console.log(r)
-	}
-
-	onMount(() => {
-		void completeSearch()
-	})
+	$: query = $page.url.searchParams.get('query')
 </script>
 
 <div>
-	{ collectionsArray }
+	{#if query}
+		<AppUnsplashImagesList {query} />
+	{/if}
+
+	{#if !query}
+		<UIIconCard icon={FaceMindBlowSolid} title='Empty query? WTF bruh?!' />
+	{/if}
 </div>

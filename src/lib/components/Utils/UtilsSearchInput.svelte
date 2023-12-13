@@ -1,21 +1,29 @@
 <script setup lang="ts">
 	import Select from 'svelte-select'
-	import { Button, P, Spinner } from 'flowbite-svelte'
+	import { Button, Spinner } from 'flowbite-svelte'
+	import UIIconCard from '$lib/components/UI/UIIconCard.svelte'
 	import { SearchOutline, MicrophoneSolid, CloseOutline, DropboxSolid } from 'flowbite-svelte-icons'
 	import { createEventDispatcher } from 'svelte'
 
 	export let value: any[] | null = []
+	export let search: string = ''
 
 	interface Events {
 		search: any
 		audio: any
+		filter: any
 	}
 
 	const dispatch = createEventDispatcher<Events>()
 </script>
 
 <div class="utils-search-input">
-	<Select {...$$restProps} bind:value={value} class="h-full !px-0">
+	<Select
+		{...$$restProps}
+		bind:value={value}
+		bind:filterText={search}
+		class="h-full !px-0" on:filter={() => dispatch('filter')}
+	>
 		<div slot="loading-icon">
 			<Spinner class="w-6" />
 		</div>
@@ -28,12 +36,8 @@
 			<CloseOutline class="w-3 text-primary-700" />
 		</svelte:fragment>
 
-		<div slot="empty" class="py-2 flex flex-col items-center">
-			<DropboxSolid class="w-24 h-24 mb-4 text-primary-700" />
-
-			<P weight="medium" color="text-primary-700">
-				Oh, is empty!
-			</P>
+		<div slot='empty' class="py-2">
+			<UIIconCard icon={DropboxSolid} title='Oh, is empty!' />
 		</div>
 	</Select>
 

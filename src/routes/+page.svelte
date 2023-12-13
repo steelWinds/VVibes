@@ -1,39 +1,26 @@
 <script lang="ts">
-	import type { Basic } from 'unsplash-js/dist/methods/collections/types'
 	import UtilsSearchInput from '$lib/components/Utils/UtilsSearchInput.svelte'
+	import { goto } from '$app/navigation'
+	import { withQuery } from 'ufo'
 	import IconLogo from '$lib/assets/icons/logo.svg?url'
 	import { api } from '$lib/api'
 
-	let asyncOptions: string[] = []
-	let selected: Basic[] | null = null
-	let lastFilterText: string = ''
-	// let currentFilterText: string = ''
-
-	const searchCollections = async (filterText: string): Promise<string[]> => {
-		if (!filterText.length) return asyncOptions
-
-		lastFilterText = ''
-
-		const response = await api.search.get(filterText)
-
-		lastFilterText = filterText
-
-		asyncOptions = response ?? []
-
-		return asyncOptions
-	}
+	let selected: any | null = null
+	let search: string = ''
 
 	const onLoadOptions = async (filterText: string): Promise<string[]> => {
-		// currentFilterText = filterText
+		if (!filterText.length) return []
 
-		const result = await searchCollections(filterText)
-
-		return result
+		return (await api.search.get(filterText)) ?? []
 	}
 
-	// const onSearch = (): void => {
-	// 	const imageQuery = currentFilterText || selected
-	// }
+	const onSearch = (): void => {
+		const query = search || selected?.label || ''
+
+		if (!query) return
+
+		void goto(withQuery('/images', { query }))
+	}
 </script>
 
 <div class="main-page bg-app-dark overflow-hidden">
@@ -55,11 +42,13 @@
 		<form class="px-4">
 			<UtilsSearchInput
 				bind:value={selected}
+				bind:search={search}
 				loadOptions={onLoadOptions}
-				placeholder={lastFilterText || 'Search images'}
-				debounceWait={0}
+				placeholder="Search images"
+				debounceWait={300}
 				clearFilterTextOnBlur={false}
 				closeListOnChange={false}
+				on:search={onSearch}
 			/>
 		</form>
 	</article>

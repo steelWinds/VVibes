@@ -3,13 +3,15 @@
 	import type { IMasonryItem } from '~/src/lib/utils/masonry-grid'
 	import WidgetMasonryGrid from '$lib/components/Widgets/WidgetMasonryGrid.svelte'
 	import UISelectable from '$lib/components/UI/UISelectable.svelte'
+	import UIIconCard from '$lib/components/UI/UIIconCard.svelte'
 	import InfiniteScroll from 'svelte-infinite-scroll'
 	import { Badge, Spinner } from 'flowbite-svelte'
-	import { ShareNodesOutline } from 'flowbite-svelte-icons'
+	import { ShareNodesOutline, DropboxSolid } from 'flowbite-svelte-icons'
 	import { unsplash } from '~/src/lib/modules/unsplash'
 	import { useLazyImage } from '$lib/actions/use-lazy-image'
 	import { useImageSkeleton } from '../../actions/use-image-skeleton'
 	import { onMount } from 'svelte'
+	import { isNil } from 'lodash-es'
 
 	type ImageSize = keyof Basic['urls']
 
@@ -20,9 +22,10 @@
 
 	let page = 1
 	let images: Array<Basic & IMasonryItem> = []
-	let totalResults: number = 0
+	let totalResults: number | null = null
 
-	$: isEnd = totalResults && images.length >= totalResults
+	$: isEnd = !isNil(totalResults) && images.length >= totalResults
+	$: isEmpty = isEnd && !images.length
 
 	const fetchImages = async (): Promise<void> => {
 		if (totalResults && images.length >= totalResults) return
@@ -53,66 +56,72 @@
 </script>
 
 <div>
-	<div class="px-2 pt-2">
-		<WidgetMasonryGrid
-			colsSettings={[
-				{
-					cols: 2,
-					breakpoint: 375
-				},
-				{
-					cols: 4,
-					breakpoint: 768
-				},
-				{
-					cols: 7,
-					breakpoint: 1024
-				}
-			]}
-			minCols={2}
-			data={images}
-			let:prop={{ item }}
-		>
-			<div
-				use:useImageSkeleton={{
-					color: item.color ?? 'gray',
-					inlineSize: item.width,
-					blockSize: item.height
-				}}
-				class="rounded-lg overflow-hidden"
+	<div class="py-3 px-3">
+		{#if isEmpty}
+			<UIIconCard icon={DropboxSolid} title='Oh, is empty!' />
+		{/if}
+
+		{#if !isEmpty}
+			<WidgetMasonryGrid
+				colsSettings={[
+					{
+						cols: 2,
+						breakpoint: 375
+					},
+					{
+						cols: 4,
+						breakpoint: 768
+					},
+					{
+						cols: 7,
+						breakpoint: 1024
+					}
+				]}
+				minCols={2}
+				data={images}
+				let:prop={{ item }}
 			>
-				<UISelectable
-					class="w-full h-full"
-					overlayClass="z-10"
-					active={selected.has(item.id)}
-					on:toggle={() => { toggleSelected(item) }}
+				<div
+					use:useImageSkeleton={{
+						color: item.color ?? 'gray',
+						inlineSize: item.width,
+						blockSize: item.height
+					}}
+					class="rounded-lg overflow-hidden"
 				>
-					<div
-						class="overflow-hidden relative"
+					<UISelectable
+						class="w-full h-full"
+						overlayClass="z-10"
+						active={selected.has(item.id)}
+						on:toggle={() => { toggleSelected(item) }}
 					>
-							<img
-								use:useLazyImage={{ src: item.urls[size] }}
-								class="h-auto w-full transition-opacity duration-150"
-								alt={item.alt_description}
-							>
-					</div>
+						<div
+							class="overflow-hidden relative"
+						>
+								<img
+									use:useLazyImage={{ src: item.urls[size] }}
+									class="h-auto w-full transition-opacity duration-150"
+									alt={item.alt_description}
+								>
+						</div>
 
-					<Badge
-						class="text-12 z-20 desktop:text-16 absolute top-2 left-2"
-						href={item.user.portfolio_url}
-						target="_blank"
-						rounded
-						color="dark"
-					>
-						<ShareNodesOutline class="h-3 mr-1" />
+						<Badge
+							class="text-12 z-20 desktop:text-16 absolute top-2 left-2"
+							href={item.user.portfolio_url}
+							target="_blank"
+							rounded
+							color="dark"
+						>
+							<ShareNodesOutline class="h-3 mr-1" />
 
-						<span class="max-w-[60px] desktop:max-w-[120px] truncate">
-							{ item.user.name }
-						</span>
-					</Badge>
-				</UISelectable>
-			</div>
-		</WidgetMasonryGrid>
+							<span class="max-w-[60px] desktop:max-w-[120px] truncate">
+								{ item.user.name }
+							</span>
+						</Badge>
+					</UISelectable>
+				</div>
+			</WidgetMasonryGrid>
+		{/if}
 
 		{#if !isEnd}
 			<div class="py-5 flex justify-center">
