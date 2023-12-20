@@ -1,5 +1,5 @@
 <script lang="ts">
-	import UtilsSearchInput from '$lib/components/Utils/UtilsSearchInput.svelte'
+	import FormSearchInput from '$lib/components/Form/FormSearchInput.svelte'
 	import { goto } from '$app/navigation'
 	import { withQuery } from 'ufo'
 	import IconLogo from '$lib/assets/icons/logo.svg?url'
@@ -39,7 +39,7 @@
 			<img class="max-w-[300px] ultrabook:max-w-[400px] laptop:max-w-[500px] mx-auto" src={IconLogo} alt="Main logo">
 		</header>
 
-		<UtilsSearchInput
+		<FormSearchInput
 			bind:value={selected}
 			bind:search={search}
 			loadOptions={onLoadOptions}

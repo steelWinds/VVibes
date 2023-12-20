@@ -2,7 +2,7 @@
 	import type { Basic } from 'unsplash-js/dist/methods/photos/types'
 	import type { IMasonryItem } from '~/src/lib/utils/masonry-grid'
 	import WidgetMasonryGrid from '$lib/components/Widgets/WidgetMasonryGrid.svelte'
-	import UISelectable from '$lib/components/UI/UISelectable.svelte'
+	import UIModalCard from '~/src/lib/components/UI/UIModalCard.svelte'
 	import UIIconCard from '$lib/components/UI/UIIconCard.svelte'
 	import InfiniteScroll from 'svelte-infinite-scroll'
 	import { Badge, Spinner } from 'flowbite-svelte'
@@ -18,7 +18,8 @@
 	export let query: string = ''
 	export let perPage: number = 100
 	export let size: ImageSize = 'regular'
-	export let selected = new Map<string, Basic>()
+	export let pending: boolean = false
+	export let hasImages: boolean = false
 
 	let page = 1
 	let images: Array<Basic & IMasonryItem> = []
@@ -43,6 +44,8 @@
 			images = [...images, ...(response?.results ?? [])]
 		} finally {
 			images = images
+
+			hasImages = Boolean(images.length)
 		}
 	}
 
@@ -52,65 +55,68 @@
 		}
 	}
 
-	const toggleSelected = (image: Basic): void => {
-		selected.has(image.id) ? selected.delete(image.id) : selected.set(image.id, image)
+	const onMountFetchImages = async (): Promise<void> => {
+		pending = true
 
-		selected = selected
+		try {
+			await fetchImages()
+		} finally {
+			pending = false
+		}
 	}
 
-	onMount(() => fetchImages())
+	onMount(onMountFetchImages)
 </script>
 
 <div>
-	<div class="p-3">
-		{#if isEmpty}
-			<UIIconCard icon={DropboxSolid} title='Oh, is empty!' />
-		{/if}
+	{#if isEmpty}
+		<UIIconCard icon={DropboxSolid} title='Oh, is empty!' />
+	{/if}
 
-		{#if !isEmpty}
-			<WidgetMasonryGrid
-				colsSettings={[
-					{
-						cols: 2,
-						breakpoint: 375
-					},
-					{
-						cols: 4,
-						breakpoint: 768
-					},
-					{
-						cols: 7,
-						breakpoint: 1024
-					}
-				]}
-				minCols={2}
-				data={images}
-				let:prop={{ item }}
-				on:postRender={onPostRender}
+	{#if !isEmpty}
+		<WidgetMasonryGrid
+			colsSettings={[
+				{
+					cols: 2,
+					breakpoint: 375
+				},
+				{
+					cols: 4,
+					breakpoint: 768
+				},
+				{
+					cols: 7,
+					breakpoint: 1024
+				}
+			]}
+			minCols={2}
+			data={images}
+			let:prop={{ item }}
+			on:postRender={onPostRender}
+		>
+			<div
+				use:useImageSkeleton={{
+					color: item.color ?? 'gray',
+					inlineSize: item.width,
+					blockSize: item.height
+				}}
+				class="rounded-lg overflow-hidden"
 			>
-				<div
-					use:useImageSkeleton={{
-						color: item.color ?? 'gray',
-						inlineSize: item.width,
-						blockSize: item.height
-					}}
-					class="rounded-lg overflow-hidden"
-				>
-					<UISelectable
-						class="w-full h-full"
-						overlayClass="z-10"
-						active={selected.has(item.id)}
-						on:toggle={() => { toggleSelected(item) }}
-					>
-						<div
-							class="overflow-hidden relative"
+				<UIModalCard modalTitle={`${item.user.name} | ${item.alt_description}`}>
+					<div slot="modal" class="grid grid-cols-1 tablet:grid-cols-2">
+						<img
+							src={item.urls[size]}
+							class="w-full h-[300px] object-cover rounded-lg"
+							alt={item.alt_description}
 						>
-								<img
-									use:useLazyImage={{ src: item.urls[size] }}
-									class="h-auto w-full transition-opacity duration-150"
-									alt={item.alt_description}
-								>
-						</div>
+					</div>
+
+					<div class="overflow-hidden relative">
+						<img
+							use:useLazyImage={{ src: item.urls[size] }}
+							class="h-auto w-full transition-opacity duration-150"
+							alt={item.alt_description}
+						>
 
 						<Badge
 							class="text-12 z-20 desktop:text-16 absolute top-2 left-2"
@@ -125,17 +131,17 @@
 								{ item.user.name }
 							</span>
 						</Badge>
-					</UISelectable>
-				</div>
-			</WidgetMasonryGrid>
-		{/if}
-
-		{#if !isEnd}
-			<div class="py-5 flex justify-center">
-				<Spinner />
+					</div>
+				</UIModalCard>
 			</div>
-		{/if}
-	</div>
+		</WidgetMasonryGrid>
+	{/if}
+
+	{#if !isEnd}
+		<div class="py-5 flex justify-center">
+			<Spinner />
+		</div>
+	{/if}
 
 	<InfiniteScroll threshold={300} window on:loadMore={fetchImages} />
 </div>

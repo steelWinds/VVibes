@@ -5,5 +5,5 @@
 </script>
 
 <Hst.Story>
-	<AppPexelsImagesList query="abc123" />
+	<AppPexelsImagesList query="nude" />
 </Hst.Story>
