@@ -1,6 +1,6 @@
 <script lang="ts" generics="T">
 	import { useMediaQuery } from '$lib/modules/use-media-query'
-	import { onMount } from 'svelte'
+	import { onMount, createEventDispatcher, tick } from 'svelte'
 	import { useWatcher } from '$lib/modules/use-watcher'
 	import { createMatrix, mergeMatrix, type TMasonryMatrix, type IMasonryItem } from '~/src/lib/utils/masonry-grid'
 
@@ -9,6 +9,12 @@
 		cols: number
 		breakpoint: number
 	}
+
+	interface Events {
+		postRender: any
+	}
+
+	const dispatch = createEventDispatcher<Events>()
 
 	export let data: TDataList[] = []
 	export let gap: number = 10
@@ -29,6 +35,12 @@
 		--gap: ${gap}px;
 		--cols: ${cols};
 	`
+
+	const onPostRender = async (): Promise<void> => {
+		await tick()
+
+		dispatch('postRender')
+	}
 
 	function updateMatrix (cols: number): void {
 		const { matrix, columnBlockSizes: _columnBlockSizes } = createMatrix({ items: data, columnCount: cols, columnSize: 200 })
@@ -53,6 +65,8 @@
 
 		columnBlockSizes = _columnBlockSizes
 		dataGroups = matrix
+
+		void onPostRender()
 	}
 
 	onMount(() => {

@@ -34,23 +34,22 @@
 		<circle cx="50" cy="50" r="48" fill="transparent" />
 	</svg>
 
-	<article class="flex flex-col justify-center h-full w-full max-w-[900px] mx-auto z-20 relative overflow-auto py-4">
+	<article class="flex flex-col justify-center h-full w-full max-w-[900px] mx-auto z-20 relative overflow-auto py-4 px-14">
 		<header class="w-full">
 			<img class="max-w-[300px] ultrabook:max-w-[400px] laptop:max-w-[500px] mx-auto" src={IconLogo} alt="Main logo">
 		</header>
 
-		<form class="px-4">
-			<UtilsSearchInput
-				bind:value={selected}
-				bind:search={search}
-				loadOptions={onLoadOptions}
-				placeholder="Search images"
-				debounceWait={300}
-				clearFilterTextOnBlur={false}
-				closeListOnChange={false}
-				on:search={onSearch}
-			/>
-		</form>
+		<UtilsSearchInput
+			bind:value={selected}
+			bind:search={search}
+			loadOptions={onLoadOptions}
+			placeholder="Search images"
+			debounceWait={300}
+			clearFilterTextOnBlur={false}
+			closeListOnChange={false}
+			on:search={onSearch}
+			on:change={onSearch}
+		/>
 	</article>
 </div>
 

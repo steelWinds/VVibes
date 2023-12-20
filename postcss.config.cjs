@@ -18,6 +18,8 @@ const config = {
         '!border',
         '!--border-*',
         '!outline',
+				'!box-shadow',
+				'!--tw-ring-*'
       ],
     },
   },

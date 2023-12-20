@@ -46,6 +46,12 @@
 		}
 	}
 
+	const onPostRender = (): void => {
+		if ((document.documentElement.scrollHeight <= document.documentElement.clientHeight) && !isEnd) {
+			void fetchImages()
+		}
+	}
+
 	const toggleSelected = (image: Basic): void => {
 		selected.has(image.id) ? selected.delete(image.id) : selected.set(image.id, image)
 
@@ -56,7 +62,7 @@
 </script>
 
 <div>
-	<div class="py-3 px-3">
+	<div class="p-3">
 		{#if isEmpty}
 			<UIIconCard icon={DropboxSolid} title='Oh, is empty!' />
 		{/if}
@@ -80,6 +86,7 @@
 				minCols={2}
 				data={images}
 				let:prop={{ item }}
+				on:postRender={onPostRender}
 			>
 				<div
 					use:useImageSkeleton={{
