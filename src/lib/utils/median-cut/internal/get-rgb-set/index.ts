@@ -2,14 +2,14 @@ import { buildRGB } from '../buildRGB'
 import { quantization } from '../quantization'
 
 interface IGetRGBSetOptions {
-  imageData: ImageData
+  imageBytes: Uint8ClampedArray
   colorDepth: IColorDepth
 }
 
 export const getRGBSet = (options: IGetRGBSetOptions): IRGBData[] => {
-  const { imageData, colorDepth } = options
+  const { imageBytes, colorDepth } = options
 
-  const RGBValues = buildRGB(imageData.data)
+  const RGBValues = buildRGB(imageBytes)
 
   const RGBSet = quantization({ RGBValues, colorDepth })
 

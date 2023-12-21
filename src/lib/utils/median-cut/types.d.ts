@@ -4,10 +4,14 @@ interface IColorDepth {
 }
 
 interface IMedianOptions {
-  image: HTMLImageElement
-  canvas: HTMLCanvasElement
+  src: string
   colorDepth: IColorDepth
   worker: Worker | null
+	sizes?: { inlineSize?: number, blockSize?: number }
+}
+
+interface IMedianCutOptions {
+  withWorker?: boolean
 }
 
 interface IRGBData {

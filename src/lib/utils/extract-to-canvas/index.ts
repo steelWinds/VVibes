@@ -1,38 +1,43 @@
 interface IExtractCanvasOptions {
-  image: HTMLImageElement
-  canvas: HTMLCanvasElement
-  sizes?: { inline: number, block: number }
-  setCanvasSize?: boolean
+  src: string
+	inlineSize?: number
+	blockSize?: number
 }
 
-export const extractToCanvas = async (options: IExtractCanvasOptions): Promise<ImageData | null> => {
-  const { image, canvas, sizes, setCanvasSize = false } = options
+export const extractToCanvas = async (options: IExtractCanvasOptions): Promise<Uint8ClampedArray | null> => {
+  const { src, inlineSize, blockSize } = options
+	const img = document.createElement('img')
 
-  if (!image.hasAttribute('crossOrigin')) {
-    image.setAttribute('crossOrigin', 'anonymous')
-  }
+	img.setAttribute('src', src)
+	img.setAttribute('crossOrigin', 'anonymous')
 
-  const inlineSize = sizes?.inline ?? image.naturalWidth ?? image.width
-  const blockSize = sizes?.block ?? image.naturalHeight ?? image.height
+	try {
+		await new Promise((resolve, reject) => {
+			img.onload = resolve
+			img.onerror = reject
+		})
 
-  if (setCanvasSize) {
-    canvas.width = inlineSize
-    canvas.height = blockSize
-  }
+		const dWidth = inlineSize ?? img.naturalWidth ?? 0
+		const dHeight = blockSize ?? img.naturalHeight ?? 0
 
-  const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
+		const canvas = document.createElement('canvas')
 
-  ctx.drawImage(
-    image,
-    0,
-    0,
-    image.naturalWidth,
-    image.naturalHeight,
-    0,
-    0,
-    inlineSize,
-    blockSize
-  )
+		const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
-  return ctx.getImageData(0, 0, canvas.width, canvas.height)
+		ctx.drawImage(
+			img,
+			0,
+			0,
+			img.naturalWidth,
+			img.naturalHeight,
+			0,
+			0,
+			dWidth,
+			dHeight
+		)
+
+		return ctx.getImageData(0, 0, canvas.width, canvas.height).data
+	} catch {
+		throw new Error('Image could not be loaded')
+	}
 }
