@@ -11,7 +11,6 @@
 	import { unsplash } from '$lib/modules/unsplash'
 	import { useLazyImage } from '$lib/actions/use-lazy-image'
 	import { useImageSkeleton } from '$lib/actions/use-image-skeleton'
-	import { isNil } from 'lodash-es'
 
 	type ImageSize = keyof Basic['urls']
 
@@ -22,9 +21,9 @@
 
 	let page = 1
 	let images: Array<Basic & IMasonryItem> = []
-	let totalResults: number | null = null
+	let totalResults: number = 0
 
-	$: isEnd = !isNil(totalResults) && images.length >= totalResults
+	$: isEnd = images.length >= totalResults
 
 	const fetchImages = async (): Promise<void> => {
 		if (totalResults && images.length >= totalResults) return
@@ -37,7 +36,7 @@
 			})
 
 			page += 1
-			totalResults = response?.total ?? Number.MAX_VALUE
+			totalResults = response?.total ?? 0
 
 			images = [...images, ...(response?.results ?? [])]
 		} finally {
@@ -126,7 +125,9 @@
 					</div>
 				</WidgetMasonryGrid>
 
-				<Spinner class="justify-self-center self-center my-2" />
+				{#if !isEnd}
+					<Spinner class="justify-self-center self-center my-2" />
+				{/if}
 			{/if}
 
 			{#if !images.length}
