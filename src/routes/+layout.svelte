@@ -7,4 +7,4 @@
 
 <slot />
 
-<SvelteToast options={{ duration: 90000000 }} />
+<SvelteToast />

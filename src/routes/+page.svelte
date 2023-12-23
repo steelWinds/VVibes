@@ -34,7 +34,7 @@
 		<circle cx="50" cy="50" r="48" fill="transparent" />
 	</svg>
 
-	<article class="flex flex-col justify-center h-full w-full max-w-[900px] mx-auto z-20 relative overflow-auto py-4 px-14">
+	<article class="flex flex-col justify-center h-full w-full max-w-[900px] mx-auto z-20 relative overflow-auto py-4 px-3">
 		<header class="w-full">
 			<img class="max-w-[300px] ultrabook:max-w-[400px] laptop:max-w-[500px] mx-auto" src={IconLogo} alt="Main logo">
 		</header>
