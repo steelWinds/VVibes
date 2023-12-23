@@ -6,7 +6,7 @@
 	let modalIsOpen = false
 </script>
 
-<Modal title={modalTitle} bind:open={modalIsOpen} autoclose>
+<Modal title={modalTitle} bind:open={modalIsOpen} outsideclose>
 	<slot name="modal" />
 </Modal>
 

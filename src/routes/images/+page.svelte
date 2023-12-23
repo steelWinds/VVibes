@@ -5,7 +5,6 @@
 	import UIIconCard from '$lib/components/UI/UIIconCard.svelte'
 	import AppUnsplashImagesList from '$lib/components/App/AppUnsplashImagesList.svelte'
 
-	let pending = false
 	let hasImages = false
 
 	$: query = $page.url.searchParams.get('query')
@@ -15,7 +14,6 @@
 	{#if query}
 		<AppUnsplashImagesList
 			{query}
-			bind:pending={pending}
 			bind:hasImages={hasImages}
 		/>
 	{/if}
@@ -24,9 +22,7 @@
 		<UIIconCard icon={FaceMindBlowSolid} title='Empty query? WTF bruh?!' />
 	{/if}
 
-	{#if !pending}
-		<Button href="/" class={hasImages ? 'fixed bottom-3 right-3 z-20' : 'mx-auto mt-4'}>
-			Back to Home
-		</Button>
-	{/if}
+	<Button href="/" class={hasImages ? 'fixed bottom-3 right-3 z-20' : 'self-center mt-4'}>
+		Back to Home
+	</Button>
 </div>

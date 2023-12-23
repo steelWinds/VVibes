@@ -62,7 +62,8 @@ export default {
         },
 
 				app: {
-					dark: '#0d1117'
+					dark: '#1E262E',
+					light: '#FFFFFF'
 				}
       }
     }

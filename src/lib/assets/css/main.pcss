@@ -39,3 +39,17 @@
 		}
 	}
 }
+
+@layer utilities {
+	:root {
+		--toastBackground: theme(colors.app.light);
+		--toastColor: theme(colors.app.dark);
+		--toastBoxShadow: 0 4px 6px 1px color-mix(in srgb, theme(colors.app.dark), transparent 65%);
+
+		&.dark {
+			--toastBackground: theme(colors.app.dark);
+			--toastColor: theme(colors.app.light);
+			--toastBoxShadow: 0 4px 6px 1px color-mix(in srgb, theme(colors.app.dark), transparent 65%);
+		}
+	}
+}

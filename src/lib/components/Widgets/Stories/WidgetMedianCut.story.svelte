@@ -1,6 +1,7 @@
 <script lang="ts">
 	import WidgetMedianCut from '../WidgetMedianCut.svelte'
 	import { onMount } from 'svelte'
+	import { SvelteToast } from '@zerodevx/svelte-toast'
 
 	const imageModules = import.meta.glob('../../../../tested-images/*.{jpg,png,jpeg,webp}')
 
@@ -23,9 +24,11 @@
 				<div class="grid grid-cols-2 gap-4 w-full mb-2">
 					<img {src} alt="Color" class="h-[300px] w-full object-cover">
 
-					<WidgetMedianCut {src} />
+					<WidgetMedianCut {src} depth={1} maxDepth={3} />
 				</div>
 			{/each}
 		{/if}
 	</div>
+
+	<SvelteToast />
 </Hst.Story>
