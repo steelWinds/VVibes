@@ -14,19 +14,24 @@
 	export let maxDepth: number = 4
 	export let blockSize: number = 500
 	export let inlineSize: number = 500
+	export let withWorker: boolean = true
 
 	const getColors = async (): Promise<string[]> => {
 		try {
-			const medianCutOptions = {
-				src,
-				colorDepth: { depth, maxDepth },
-				sizes: {
-					blockSize,
-					inlineSize
+			const median = (await medianCut(
+				{ withWorker },
+				{
+					src,
+					sizes: {
+						blockSize,
+						inlineSize
+					}
+				},
+				{
+					colorDepth: { depth, maxDepth }
 				}
-			}
-
-			const median = (await medianCut({ withWorker: true }, medianCutOptions))
+				)
+			)
 
 			return uniq(median.map(color => Color(color).hex()))
 		} catch {

@@ -1,38 +1,42 @@
 import { isNull, floor } from 'lodash-es'
-import { colorRange } from './color-range'
-import { getColor } from './get-color'
+import { biggestRGBChannel } from './biggest-rgb-channel'
+import { reduceRGBData } from './reduce-rgb-data'
 
 interface IQuantizationOptions {
   RGBValues: IRGBData[]
   colorDepth?: IColorDepth
 }
 
-export const quantization = (options: IQuantizationOptions): IRGBData[] => {
-  const DEFAULT_COLOR_DEPTH = { depth: 1, maxDepth: 1 }
+const DEFAULT_COLOR_DEPTH = { depth: 0, maxDepth: 4 }
 
+export const quantization = (options: IQuantizationOptions): IRGBData[] => {
   const { RGBValues, colorDepth } = options
+
   const { depth, maxDepth } = colorDepth ?? DEFAULT_COLOR_DEPTH
 
-  if (depth >= maxDepth || RGBValues.length === 0) return [getColor(RGBValues)]
+  if (depth === maxDepth) return [reduceRGBData(RGBValues)]
 
   const mid = floor(RGBValues.length / 2)
+
   const nextDepth = { depth: depth + 1, maxDepth }
 
-  const chanInRange = colorRange(RGBValues)
-  const sortedRGBValues = RGBValues.toSorted((prePixel, nextPixel) => isNull(chanInRange) ? -1 : prePixel[chanInRange] - nextPixel[chanInRange])
+  const biggestChannelInRange = biggestRGBChannel(RGBValues)
 
-  const RGB_VALUES_START = {
+  const sortedRGBValues = RGBValues.toSorted((prePixel, nextPixel) =>
+		isNull(biggestChannelInRange) ? -1 : prePixel[biggestChannelInRange] - nextPixel[biggestChannelInRange])
+
+  const rbgSliceStart = {
     RGBValues: sortedRGBValues.slice(0, mid),
     colorDepth: nextDepth
   }
 
-  const RGB_VALUES_END = {
+  const rgbSliceEnd = {
     RGBValues: sortedRGBValues.slice(mid + 1),
     colorDepth: nextDepth
   }
 
   return [
-    ...(quantization(RGB_VALUES_START) ?? []),
-    ...(quantization(RGB_VALUES_END) ?? [])
+    ...(quantization(rbgSliceStart) ?? []),
+    ...(quantization(rgbSliceEnd) ?? [])
   ]
 }

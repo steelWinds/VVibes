@@ -1,9 +1,9 @@
-export const colorRange = (RGBValues: IRGBData[]): 'r' | 'g' | 'b' | null => {
+export const biggestRGBChannel = (RGBValues: IRGBData[]): 'r' | 'g' | 'b' | null => {
   let rMax: number, gMax: number, bMax: number
   let rMin: number, gMin: number, bMin: number
 
-  rMax = gMax = bMax = Number.MIN_VALUE
-  rMin = gMin = bMin = Number.MAX_VALUE
+  rMax = gMax = bMax = Number.NEGATIVE_INFINITY
+  rMin = gMin = bMin = Number.POSITIVE_INFINITY
 
   RGBValues.forEach((pixel) => {
     rMax = Math.max(rMax, pixel.r)

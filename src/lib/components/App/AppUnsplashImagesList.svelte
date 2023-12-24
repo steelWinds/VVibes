@@ -88,15 +88,15 @@
 						class="rounded-lg overflow-hidden"
 					>
 						<UIModalCard modalTitle={`${item.user.name} | ${item.alt_description}`}>
-							<div slot="modal" class="grid grid-cols-1 tablet:grid-cols-2 gap-6">
+							<div slot="modal" class="grid grid-cols-1 gap-6">
 								<img
 									src={item.urls[size]}
-									class="w-full h-[200px] tablet:h-[300px] object-cover rounded-lg"
+									class="w-auto max-h-[200px] max-h-[300px] object-cover rounded-lg mx-auto"
 									alt={item.alt_description}
 								>
 
 								<div class="rounded-lg overflow-hidden grid min-h-[300px]">
-									<WidgetMedianCut src={item.urls[size]} depth={1} maxDepth={3} blockSize={300} inlineSize={300} />
+									<WidgetMedianCut src={item.urls[size]} depth={0} maxDepth={2} blockSize={300} inlineSize={300} />
 								</div>
 							</div>
 

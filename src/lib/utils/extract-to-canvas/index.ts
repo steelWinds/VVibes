@@ -17,10 +17,10 @@ export const extractToCanvas = async (options: IExtractCanvasOptions): Promise<U
 			img.onerror = reject
 		})
 
-		const dWidth = inlineSize ?? img.naturalWidth ?? 0
-		const dHeight = blockSize ?? img.naturalHeight ?? 0
-
 		const canvas = document.createElement('canvas')
+
+		canvas.width = inlineSize ?? canvas.width
+		canvas.height = blockSize ?? canvas.height
 
 		const ctx = canvas.getContext('2d') as CanvasRenderingContext2D
 
@@ -28,12 +28,8 @@ export const extractToCanvas = async (options: IExtractCanvasOptions): Promise<U
 			img,
 			0,
 			0,
-			img.naturalWidth,
-			img.naturalHeight,
-			0,
-			0,
-			dWidth,
-			dHeight
+			canvas.width,
+			canvas.height
 		)
 
 		return ctx.getImageData(0, 0, canvas.width, canvas.height).data

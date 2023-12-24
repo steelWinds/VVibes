@@ -1,7 +1,7 @@
-export const buildRGB = (data: Uint8ClampedArray): IRGBData[] => {
-  const rgbValues: IRGBData[] = []
+const RGB_STEP = 4
 
-  const RGB_STEP = 4
+export const buildRGBData = (data: Uint8ClampedArray): IRGBData[] => {
+  const rgbValues: IRGBData[] = []
 
   for (let i = 0; i < data.length; i += RGB_STEP) {
     rgbValues.push({

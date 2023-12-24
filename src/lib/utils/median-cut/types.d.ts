@@ -5,13 +5,20 @@ interface IColorDepth {
 
 interface IMedianOptions {
   src: string
-  colorDepth: IColorDepth
   worker: Worker | null
 	sizes?: { inlineSize?: number, blockSize?: number }
 }
 
 interface IMedianCutOptions {
   withWorker?: boolean
+}
+
+interface IQuantizationOptions {
+	colorDepth?: IColorDepth
+}
+
+interface IGetRGBColorsOptions {
+  imageBytes: Uint8ClampedArray
 }
 
 interface IRGBData {

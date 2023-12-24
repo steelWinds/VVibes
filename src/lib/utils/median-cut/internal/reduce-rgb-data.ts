@@ -1,6 +1,6 @@
 import { mapValues, round } from 'lodash-es'
 
-export const getColor = (RGBValues: IRGBData[]): IRGBData => {
+export const reduceRGBData = (RGBValues: IRGBData[]): IRGBData => {
   const color = RGBValues.reduce(
     (prev, curr) => {
       prev.r += curr.r
