@@ -1,4 +1,5 @@
 <script lang="ts" generics="T">
+	import { min } from 'lodash-es'
 	import { useMediaQuery } from '$lib/modules/use-media-query'
 	import { onMount, createEventDispatcher, tick } from 'svelte'
 	import { useWatcher } from '$lib/modules/use-watcher'
@@ -11,7 +12,7 @@
 	}
 
 	interface Events {
-		postRender: any
+		postRender: number
 	}
 
 	const dispatch = createEventDispatcher<Events>()
@@ -36,10 +37,11 @@
 		--cols: ${cols};
 	`
 
-	const onPostRender = async (): Promise<void> => {
+	const onPostRender = async (columnSizes: number[]): Promise<void> => {
 		await tick()
 
-		dispatch('postRender')
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		dispatch('postRender', min(columnSizes)!)
 	}
 
 	function updateMatrix (cols: number): void {
@@ -47,26 +49,32 @@
 
 		columnBlockSizes = _columnBlockSizes
 		dataGroups = matrix
+
+		void onPostRender(_columnBlockSizes)
 	}
 
 	async function watchFunction (old: TDataList[], next: TDataList[]): Promise<void> {
-		const differenceLength = next.length - old.length
+		try {
+			const differenceLength = next.length - old.length
 
-		if (!differenceLength) return
+			if (!differenceLength) return
 
-		const nextList = !old.length ? next : next.slice(differenceLength)
+			const nextList = !old.length ? next : next.slice(differenceLength)
 
-		const { matrix, columnBlockSizes: _columnBlockSizes } = await mergeMatrix({
-			matrix: dataGroups,
-			matrixColumnBlockSizes: columnBlockSizes,
-			items: nextList,
-			columnSize: 200
-		})
+			const { matrix, columnBlockSizes: _columnBlockSizes } = await mergeMatrix({
+				matrix: dataGroups,
+				matrixColumnBlockSizes: columnBlockSizes,
+				items: nextList,
+				columnSize: 200
+			})
 
-		columnBlockSizes = _columnBlockSizes
-		dataGroups = matrix
+			columnBlockSizes = _columnBlockSizes
+			dataGroups = matrix
 
-		void onPostRender()
+			void onPostRender(_columnBlockSizes)
+		} catch (err) {
+			console.error(err)
+		}
 	}
 
 	onMount(() => {
